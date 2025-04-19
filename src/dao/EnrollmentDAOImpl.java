@@ -1,0 +1,63 @@
+package dao;
+
+import models.Enrollment;
+import util.DBConnection;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class EnrollmentDAOImpl implements EnrollmentDAO {
+
+    @Override
+    public void enrollStudent(Enrollment enrollment) throws Exception {
+        String sql = "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, enrollment.getStudentId());
+            stmt.setInt(2, enrollment.getCourseId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new Exception("Error enrolling student: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Enrollment> getEnrollmentsByStudent(int studentId) throws Exception {
+        String sql = "SELECT * FROM enrollments WHERE student_id = ?";
+        List<Enrollment> enrollments = new ArrayList<>();
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, studentId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    enrollments.add(new Enrollment(
+                            rs.getInt("id"),
+                            rs.getInt("student_id"),
+                            rs.getInt("course_id")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error getting enrollments: " + e.getMessage(), e);
+        }
+
+        return enrollments;
+    }
+
+    @Override
+    public void deleteEnrollment(int id) throws Exception {
+        String sql = "DELETE FROM enrollments WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new Exception("Error deleting enrollment: " + e.getMessage(), e);
+        }
+    }
+}

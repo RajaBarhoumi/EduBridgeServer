@@ -1,0 +1,65 @@
+package dao;
+
+import models.Option;
+import util.DBConnection;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class OptionDAOImpl implements OptionDAO {
+
+    @Override
+    public void addOption(Option option) throws Exception {
+        String sql = "INSERT INTO options (content, is_correct, question_id) VALUES (?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, option.getContent());
+            stmt.setBoolean(2, option.isCorrect());
+            stmt.setInt(3, option.getQuestionId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new Exception("Error adding option: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Option> getOptionsByQuestion(int questionId) throws Exception {
+        String sql = "SELECT * FROM options WHERE question_id = ?";
+        List<Option> options = new ArrayList<>();
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, questionId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    options.add(new Option(
+                            rs.getInt("id"),
+                            rs.getString("content"),
+                            rs.getBoolean("is_correct"),
+                            rs.getInt("question_id")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error fetching options: " + e.getMessage(), e);
+        }
+
+        return options;
+    }
+
+    @Override
+    public void deleteOption(int id) throws Exception {
+        String sql = "DELETE FROM options WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new Exception("Error deleting option: " + e.getMessage(), e);
+        }
+    }
+}
