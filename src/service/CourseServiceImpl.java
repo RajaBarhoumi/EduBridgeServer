@@ -37,4 +37,9 @@ public class CourseServiceImpl implements CourseService {
     public void delete(int id) throws Exception {
         courseDAO.delete(id);
     }
+
+    @Override
+    public List<Course> getCoursesByProfessorId(int professorId) throws Exception {
+        return courseDAO.getCoursesByProfessorId(professorId);
+    }
 }

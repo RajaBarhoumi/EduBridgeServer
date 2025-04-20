@@ -60,4 +60,13 @@ public class CourseRemoteServiceImpl extends UnicastRemoteObject implements Cour
             throw new RemoteException("Error deleting course: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public List<Course> getCoursesByProfessorId(int professorId) throws RemoteException {
+        try {
+            return courseService.getCoursesByProfessorId(professorId);
+        } catch (Exception e) {
+            throw new RemoteException("Error fetching courses by professor: " + e.getMessage(), e);
+        }
+    }
 }
