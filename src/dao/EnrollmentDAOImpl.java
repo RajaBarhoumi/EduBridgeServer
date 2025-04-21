@@ -11,12 +11,13 @@ public class EnrollmentDAOImpl implements EnrollmentDAO {
 
     @Override
     public void enrollStudent(Enrollment enrollment) throws Exception {
-        String sql = "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)";
+        String sql = "INSERT INTO enrollments (student_id, course_id, enrollment_date) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, enrollment.getStudentId());
             stmt.setInt(2, enrollment.getCourseId());
+            stmt.setDate(3, new java.sql.Date(enrollment.getDate().getTime()));
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new Exception("Error enrolling student: " + e.getMessage(), e);
@@ -37,7 +38,8 @@ public class EnrollmentDAOImpl implements EnrollmentDAO {
                     enrollments.add(new Enrollment(
                             rs.getInt("id"),
                             rs.getInt("student_id"),
-                            rs.getInt("course_id")
+                            rs.getInt("course_id"),
+                            rs.getDate("enrollment_date")
                     ));
                 }
             }
