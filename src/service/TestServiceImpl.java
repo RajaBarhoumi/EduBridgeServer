@@ -24,6 +24,11 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
+    public List<Test> getTestsByStudentId(int studentId) throws Exception {
+        return testDAO.findByStudentId(studentId);
+    }
+
+    @Override
     public List<Test> getTestsByCourseId(int courseId) throws Exception {
         return testDAO.findByCourseId(courseId);
     }

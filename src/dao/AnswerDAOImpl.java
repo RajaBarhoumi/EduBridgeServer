@@ -11,11 +11,11 @@ public class AnswerDAOImpl implements AnswerDAO {
 
     @Override
     public void saveAnswer(Answer answer) throws Exception {
-        String sql = "INSERT INTO answers (student_id, question_id, selected_option_id) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO answers (student_test_id, question_id, selected_option_id) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, answer.getStudentId());
+            stmt.setInt(1, answer.getStudentTestId());
             stmt.setInt(2, answer.getQuestionId());
             stmt.setInt(3, answer.getSelectedOptionId());
             stmt.executeUpdate();

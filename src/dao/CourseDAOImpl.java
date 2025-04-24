@@ -108,4 +108,37 @@ public class CourseDAOImpl implements CourseDAO {
             stmt.executeUpdate();
         }
     }
+
+    @Override
+    public List<Course> getCoursesByStudent(int studentId) throws Exception {
+        String sql = "SELECT c.* FROM courses c " +
+                "JOIN enrollments e ON c.id = e.course_id " +
+                "WHERE e.student_id = ?";
+        List<Course> courses = new ArrayList<>();
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, studentId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    courses.add(mapRowToCourse(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error fetching courses by student: " + e.getMessage(), e);
+        }
+
+        return courses;
+    }
+
+    private Course mapRowToCourse(ResultSet rs) throws SQLException {
+        return new Course(
+                rs.getInt("id"),
+                rs.getString("title"),
+                rs.getString("description"),
+                Course.Level.valueOf(rs.getString("level")),
+                rs.getInt("professor_id")
+        );
+    }
 }

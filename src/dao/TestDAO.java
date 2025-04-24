@@ -9,6 +9,7 @@ public interface TestDAO {
     Test findById(int id) throws Exception;
     List<Test> findByCourseId(int courseId) throws Exception;
     List<Test> findByProfessorId(int professorId) throws Exception;
+    List<Test> findByStudentId(int studentId) throws Exception;
     void updateTest(Test test) throws Exception;
     void deleteTest(int testId) throws Exception;
 }

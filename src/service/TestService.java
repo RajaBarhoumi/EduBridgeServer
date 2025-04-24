@@ -11,4 +11,5 @@ public interface TestService {
     List<Test> getTestsByProfessorId(int professorId) throws Exception;
     void updateTest(Test test) throws Exception;
     void deleteTest(int testId) throws Exception;
+    List<Test> getTestsByStudentId(int studentId) throws Exception;
 }

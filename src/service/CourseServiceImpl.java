@@ -42,4 +42,10 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> getCoursesByProfessorId(int professorId) throws Exception {
         return courseDAO.getCoursesByProfessorId(professorId);
     }
+
+    @Override
+    public List<Course> getCoursesByStudentId(int studentId) throws Exception {
+        return courseDAO.getCoursesByStudent(studentId);
+    }
+
 }

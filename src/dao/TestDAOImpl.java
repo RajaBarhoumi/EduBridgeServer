@@ -127,4 +127,37 @@ public class TestDAOImpl implements TestDAO {
             throw new Exception("Error deleting test: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public List<Test> findByStudentId(int studentId) throws Exception {
+        List<Test> tests = new ArrayList<>();
+
+        String query = "SELECT t.id, t.title, t.course_id, t.professor_id, t.time_limit, t.max_attempts " +
+                "FROM tests t " +
+                "INNER JOIN enrollments e ON t.course_id = e.course_id " +
+                "WHERE e.student_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, studentId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Test test = new Test();
+                test.setId(rs.getInt("id"));
+                test.setTitle(rs.getString("title"));
+                test.setCourseId(rs.getInt("course_id"));
+                test.setProfessorId(rs.getInt("professor_id"));
+                test.setTimeLimit(rs.getInt("time_limit"));
+                test.setMaxAttempts(rs.getInt("max_attempts"));
+                tests.add(test);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL Error: " + e.getMessage());
+            throw new Exception("Error fetching tests for student", e);
+        }
+
+        return tests;
+    }
+
 }

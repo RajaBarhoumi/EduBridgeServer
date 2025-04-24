@@ -35,6 +35,15 @@ public class TestRemoteServiceImpl extends UnicastRemoteObject implements TestRe
     }
 
     @Override
+    public List<Test> getTestsByStudentId(int studentId) throws RemoteException {
+        try {
+            return testService.getTestsByStudentId(studentId);
+        } catch (Exception e) {
+            throw new RemoteException("Error getting tests by student ID: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
     public List<Test> getTestsByCourseId(int courseId) throws RemoteException {
         try {
             return testService.getTestsByCourseId(courseId);
