@@ -7,4 +7,5 @@ public interface EnrollmentService {
     void enrollStudent(Enrollment enrollment) throws Exception;
     List<Enrollment> getEnrollmentsByStudent(int studentId) throws Exception;
     void deleteEnrollment(int id) throws Exception;
+    int getCourseCountByStudentId(int studentId) throws Exception;
 }

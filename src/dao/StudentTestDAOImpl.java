@@ -216,9 +216,9 @@ public class StudentTestDAOImpl implements StudentTestDAO {
     @Override
     public int getCertificateCountByProfessorId(int professorId) throws Exception {
         int count = 0;
-        String query = "SELECT COUNT(*) FROM StudentTest st " +
-                "JOIN Test t ON st.test_id = t.id " +
-                "JOIN Course c ON t.course_id = c.id " +
+        String query = "SELECT COUNT(*) FROM student_tests st " +
+                "JOIN tests t ON st.test_id = t.id " +
+                "JOIN courses c ON t.course_id = c.id " +
                 "WHERE c.professor_id = ? AND st.passed = 1";
 
         try (Connection conn = DBConnection.getConnection();
@@ -235,6 +235,42 @@ public class StudentTestDAOImpl implements StudentTestDAO {
         }
 
         return count;
+    }
+
+    @Override
+    public int getTestCountByStudentId(int studentId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM student_tests WHERE student_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, studentId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                } else {
+                    return 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error counting tests by student ID: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public int getCertificateCountByStudentId(int studentId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM student_tests WHERE student_id = ? AND passed = 1";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, studentId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                } else {
+                    return 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error counting certificates by student ID: " + e.getMessage(), e);
+        }
     }
 
 }

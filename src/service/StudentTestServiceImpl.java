@@ -52,4 +52,14 @@ public class StudentTestServiceImpl implements StudentTestService {
     public int getCertificateCountByProfessorId(int professorId) throws Exception{
         return studentTestDAO.getCertificateCountByProfessorId(professorId);
     }
+
+    @Override
+    public int getTestCountByStudentId(int studentId) throws Exception {
+        return studentTestDAO.getTestCountByStudentId(studentId);
+    }
+
+    @Override
+    public int getCertificateCountByStudentId(int studentId) throws Exception{
+        return studentTestDAO.getCertificateCountByStudentId(studentId);
+    }
 }

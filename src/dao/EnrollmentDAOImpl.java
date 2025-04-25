@@ -62,4 +62,22 @@ public class EnrollmentDAOImpl implements EnrollmentDAO {
             throw new Exception("Error deleting enrollment: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public int getCourseCountByStudentId(int studentId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM enrollments WHERE student_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, studentId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error counting courses for student ID: " + e.getMessage(), e);
+        }
+        return 0;
+    }
+
 }

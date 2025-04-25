@@ -87,4 +87,22 @@ public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements
             throw new RemoteException("Error getting certificate count: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public int getTestCountByStudentId(int studentId) throws RemoteException {
+        try{
+            return studentTestService.getTestCountByStudentId(studentId);
+        }catch (Exception e){
+            throw new RemoteException("Error getting test count: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public int getCertificateCountByStudentId(int studentId) throws RemoteException {
+        try{
+            return studentTestService.getCertificateCountByStudentId(studentId);
+        }catch (Exception e){
+            throw new RemoteException("Error getting certificate count: " + e.getMessage(), e);
+        }
+    }
 }

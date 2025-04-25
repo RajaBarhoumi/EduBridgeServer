@@ -27,4 +27,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     public void deleteEnrollment(int id) throws Exception {
         enrollmentDAO.deleteEnrollment(id);
     }
+
+    @Override
+    public int getCourseCountByStudentId(int studentId) throws Exception {
+        return enrollmentDAO.getCourseCountByStudentId(studentId);
+    }
 }

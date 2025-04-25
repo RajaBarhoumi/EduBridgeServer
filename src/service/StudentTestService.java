@@ -13,4 +13,6 @@ public interface StudentTestService {
     void deleteStudentTest(int studentTestId) throws Exception;
     String calculateAndUpdateStudentTestScore(int studentTestId) throws Exception;
     int getCertificateCountByProfessorId(int professorId) throws Exception;
+    int getTestCountByStudentId(int studentId) throws Exception;
+    int getCertificateCountByStudentId(int studentId) throws Exception;
 }

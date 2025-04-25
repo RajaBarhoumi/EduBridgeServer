@@ -42,4 +42,13 @@ public class EnrollmentRemoteServiceImpl extends UnicastRemoteObject implements 
             throw new RemoteException("Error deleting enrollment: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public int getCourseCountByStudentId(int studentId) throws RemoteException{
+        try {
+            return enrollmentService.getCourseCountByStudentId(studentId);
+        }catch (Exception e){
+            throw new RemoteException("Error fetching course count: " + e.getMessage(), e);
+        }
+    }
 }
