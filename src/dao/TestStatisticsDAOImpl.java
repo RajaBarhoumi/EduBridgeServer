@@ -51,8 +51,7 @@ public class TestStatisticsDAOImpl implements TestStatisticsDAO {
                         rs.getInt("test_id"),
                         rs.getInt("total_attempts"),
                         rs.getFloat("average_score"),
-                        rs.getFloat("passing_rate"),
-                        rs.getTimestamp("last_updated")
+                        rs.getFloat("passing_rate")
                 );
             }
             return null;

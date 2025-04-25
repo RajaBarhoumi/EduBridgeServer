@@ -33,4 +33,13 @@ public class AnswerRemoteServiceImpl extends UnicastRemoteObject implements Answ
             throw new RemoteException("Error retrieving answers: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public boolean isAnswerCorrect(int selectedOptionId) throws RemoteException {
+        try {
+            return answerService.isAnswerCorrect(selectedOptionId);
+        } catch (Exception e) {
+            throw new RemoteException("Error checking if answer is correct: " + e.getMessage(), e);
+        }
+    }
 }

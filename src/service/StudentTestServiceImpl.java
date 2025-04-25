@@ -14,8 +14,8 @@ public class StudentTestServiceImpl implements StudentTestService {
     }
 
     @Override
-    public void addStudentTest(StudentTest studentTest) throws Exception {
-        studentTestDAO.addStudentTest(studentTest);
+    public int addStudentTest(StudentTest studentTest) throws Exception {
+        return studentTestDAO.addStudentTest(studentTest);
     }
 
     @Override
@@ -41,5 +41,15 @@ public class StudentTestServiceImpl implements StudentTestService {
     @Override
     public void deleteStudentTest(int studentTestId) throws Exception {
         studentTestDAO.deleteStudentTest(studentTestId);
+    }
+
+    @Override
+    public String calculateAndUpdateStudentTestScore(int studentTestId) throws Exception {
+        return studentTestDAO.calculateAndUpdateStudentTestScore(studentTestId);
+    }
+
+    @Override
+    public int getCertificateCountByProfessorId(int professorId) throws Exception{
+        return studentTestDAO.getCertificateCountByProfessorId(professorId);
     }
 }

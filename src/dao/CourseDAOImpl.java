@@ -5,7 +5,9 @@ import util.DBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CourseDAOImpl implements CourseDAO {
 
@@ -85,7 +87,6 @@ public class CourseDAOImpl implements CourseDAO {
         return courses;
     }
 
-
     @Override
     public void update(Course course) throws Exception {
         String sql = "UPDATE courses SET title = ?, description = ?, level = ? WHERE id = ?";
@@ -141,4 +142,72 @@ public class CourseDAOImpl implements CourseDAO {
                 rs.getInt("professor_id")
         );
     }
+
+    @Override
+    public Course getCourseByTestId(int testId) throws Exception {
+        String sql = "SELECT c.* FROM courses c " +
+                "JOIN tests t ON c.id = t.course_id " +
+                "WHERE t.id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, testId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapRowToCourse(rs);
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error fetching course by test ID: " + e.getMessage(), e);
+        }
+
+        return null;
+    }
+
+    @Override
+    public int getCourseCountByProfessorId(int professorId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM courses WHERE professor_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, professorId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error counting courses by professor ID: " + e.getMessage(), e);
+        }
+        return 0;
+    }
+
+    @Override
+    public Map<String, Integer> getPassRateDistributionByCourse(int professorId) throws Exception {
+        String sql = "SELECT c.title, COUNT(t.id) AS test_count " +
+                "FROM courses c " +
+                "LEFT JOIN tests t ON c.id = t.course_id " +
+                "WHERE c.professor_id = ? " +
+                "GROUP BY c.title";
+
+        Map<String, Integer> distribution = new HashMap<>();
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, professorId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String courseTitle = rs.getString("title");
+                int testCount = rs.getInt("test_count");
+                distribution.put(courseTitle, testCount);
+            }
+
+        } catch (SQLException e) {
+            throw new Exception("Error getting pass rate distribution: " + e.getMessage(), e);
+        }
+
+        return distribution;
+    }
+
 }

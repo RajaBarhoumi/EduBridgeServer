@@ -58,4 +58,23 @@ public class AnswerDAOImpl implements AnswerDAO {
 
         return answers;
     }
+
+    @Override
+    public boolean isAnswerCorrect(int selectedOptionId) throws Exception {
+        String sql = "SELECT is_correct FROM options WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, selectedOptionId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBoolean("is_correct");
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error checking if answer is correct: " + e.getMessage(), e);
+        }
+        return false;
+    }
+
 }

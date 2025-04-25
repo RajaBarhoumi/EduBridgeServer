@@ -17,9 +17,9 @@ public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements
     }
 
     @Override
-    public void addStudentTest(StudentTest studentTest) throws RemoteException {
+    public int addStudentTest(StudentTest studentTest) throws RemoteException {
         try {
-            studentTestService.addStudentTest(studentTest);
+            return studentTestService.addStudentTest(studentTest);
         } catch (Exception e) {
             throw new RemoteException("Error adding student test: " + e.getMessage(), e);
         }
@@ -67,6 +67,24 @@ public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements
             studentTestService.deleteStudentTest(studentTestId);
         } catch (Exception e) {
             throw new RemoteException("Error deleting student test: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public String calculateAndUpdateStudentTestScore(int studentTestId) throws RemoteException {
+        try {
+            return studentTestService.calculateAndUpdateStudentTestScore(studentTestId);
+        } catch (Exception e) {
+            throw new RemoteException("Error calculating and updating student test score: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public int getCertificateCountByProfessorId(int professorId) throws RemoteException{
+        try{
+            return studentTestService.getCertificateCountByProfessorId(professorId);
+        }catch (Exception e){
+            throw new RemoteException("Error getting certificate count: " + e.getMessage(), e);
         }
     }
 }

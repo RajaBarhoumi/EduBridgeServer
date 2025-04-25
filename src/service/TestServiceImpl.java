@@ -47,4 +47,14 @@ public class TestServiceImpl implements TestService {
     public void deleteTest(int testId) throws Exception {
         testDAO.deleteTest(testId);
     }
+
+    @Override
+    public int getNumberOfQuestions(int testId) throws Exception {
+        return testDAO.getNumberOfQuestions(testId);
+    }
+
+    @Override
+    public int getTestCountByProfessorId(int professorId) throws Exception{
+        return testDAO.getTestCountByProfessorId(professorId);
+    }
 }

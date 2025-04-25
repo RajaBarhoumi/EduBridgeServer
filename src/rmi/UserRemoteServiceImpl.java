@@ -41,4 +41,13 @@ public class UserRemoteServiceImpl extends UnicastRemoteObject implements UserRe
             throw new RemoteException("Error retrieving user: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public User getStudentByStudentTestId(int studentTestId) throws RemoteException {
+        try {
+            return userService.getStudentByStudentTestId(studentTestId);
+        } catch (Exception e) {
+            throw new RemoteException("Error retrieving student by StudentTest ID: " + e.getMessage(), e);
+        }
+    }
 }

@@ -78,4 +78,31 @@ public class UserDAOImpl implements UserDAO {
             throw new Exception("Error finding user by email: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public User getStudentByStudentTestId(int studentTestId) throws Exception {
+        String sql = "SELECT u.id, u.name, u.email, u.password, u.role " +
+                "FROM users u " +
+                "JOIN student_tests st ON u.id = st.student_id " +
+                "WHERE st.id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, studentTestId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new User(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("password"),
+                            User.Role.valueOf(rs.getString("role"))
+                    );
+                }
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error fetching student by StudentTest ID: " + e.getMessage(), e);
+        }
+    }
+
 }

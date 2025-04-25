@@ -48,4 +48,13 @@ public class UserServiceImpl implements UserService {
             throw new Exception("Unauthorized: User must be a " + requiredRole);
         }
     }
+
+    @Override
+    public User getStudentByStudentTestId(int studentTestId) throws Exception {
+        User user = userDAO.getStudentByStudentTestId(studentTestId);
+        if (user == null) {
+            throw new Exception("No student found for StudentTest ID: " + studentTestId);
+        }
+        return user;
+    }
 }

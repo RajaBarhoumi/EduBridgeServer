@@ -12,4 +12,6 @@ public interface TestDAO {
     List<Test> findByStudentId(int studentId) throws Exception;
     void updateTest(Test test) throws Exception;
     void deleteTest(int testId) throws Exception;
+    int getNumberOfQuestions(int testId) throws Exception;
+    int getTestCountByProfessorId(int professorId) throws Exception;
 }

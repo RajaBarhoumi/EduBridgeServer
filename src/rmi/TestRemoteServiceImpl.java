@@ -78,4 +78,22 @@ public class TestRemoteServiceImpl extends UnicastRemoteObject implements TestRe
             throw new RemoteException("Error deleting test: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public int getNumberOfQuestions(int testId) throws RemoteException {
+        try {
+            return testService.getNumberOfQuestions(testId);
+        } catch (Exception e) {
+            throw new RemoteException("Error getting number of questions: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public int getTestCountByProfessorId(int professorId) throws RemoteException{
+        try {
+            return testService.getTestCountByProfessorId(professorId);
+        }catch (Exception e){
+            throw new RemoteException("Error getting tests by professor ID: " + e.getMessage(), e);
+        }
+    }
 }

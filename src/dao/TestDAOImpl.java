@@ -11,14 +11,13 @@ public class TestDAOImpl implements TestDAO {
 
     @Override
     public void addTest(Test test) throws Exception {
-        String sql = "INSERT INTO tests (title, course_id, professor_id, time_limit, max_attempts) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tests (title, course_id, professor_id, time_limit) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, test.getTitle());
             stmt.setInt(2, test.getCourseId());
             stmt.setInt(3, test.getProfessorId());
             stmt.setInt(4, test.getTimeLimit());
-            stmt.setInt(5, test.getMaxAttempts());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new Exception("Error adding test: " + e.getMessage(), e);
@@ -38,8 +37,7 @@ public class TestDAOImpl implements TestDAO {
                             rs.getString("title"),
                             rs.getInt("course_id"),
                             rs.getInt("professor_id"),
-                            rs.getInt("time_limit"),
-                            rs.getInt("max_attempts")
+                            rs.getInt("time_limit")
                     );
                 }
                 return null;
@@ -63,8 +61,7 @@ public class TestDAOImpl implements TestDAO {
                             rs.getString("title"),
                             rs.getInt("course_id"),
                             rs.getInt("professor_id"),
-                            rs.getInt("time_limit"),
-                            rs.getInt("max_attempts")
+                            rs.getInt("time_limit")
                     ));
                 }
             }
@@ -88,8 +85,7 @@ public class TestDAOImpl implements TestDAO {
                             rs.getString("title"),
                             rs.getInt("course_id"),
                             rs.getInt("professor_id"),
-                            rs.getInt("time_limit"),
-                            rs.getInt("max_attempts")
+                            rs.getInt("time_limit")
                     ));
                 }
             }
@@ -101,15 +97,14 @@ public class TestDAOImpl implements TestDAO {
 
     @Override
     public void updateTest(Test test) throws Exception {
-        String sql = "UPDATE tests SET title = ?, course_id = ?, professor_id = ?, time_limit = ?, max_attempts = ? WHERE id = ?";
+        String sql = "UPDATE tests SET title = ?, course_id = ?, professor_id = ?, time_limit = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, test.getTitle());
             stmt.setInt(2, test.getCourseId());
             stmt.setInt(3, test.getProfessorId());
             stmt.setInt(4, test.getTimeLimit());
-            stmt.setInt(5, test.getMaxAttempts());
-            stmt.setInt(6, test.getId());
+            stmt.setInt(5, test.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new Exception("Error updating test: " + e.getMessage(), e);
@@ -132,7 +127,7 @@ public class TestDAOImpl implements TestDAO {
     public List<Test> findByStudentId(int studentId) throws Exception {
         List<Test> tests = new ArrayList<>();
 
-        String query = "SELECT t.id, t.title, t.course_id, t.professor_id, t.time_limit, t.max_attempts " +
+        String query = "SELECT t.id, t.title, t.course_id, t.professor_id, t.time_limit " +
                 "FROM tests t " +
                 "INNER JOIN enrollments e ON t.course_id = e.course_id " +
                 "WHERE e.student_id = ?";
@@ -149,7 +144,6 @@ public class TestDAOImpl implements TestDAO {
                 test.setCourseId(rs.getInt("course_id"));
                 test.setProfessorId(rs.getInt("professor_id"));
                 test.setTimeLimit(rs.getInt("time_limit"));
-                test.setMaxAttempts(rs.getInt("max_attempts"));
                 tests.add(test);
             }
         } catch (SQLException e) {
@@ -159,5 +153,41 @@ public class TestDAOImpl implements TestDAO {
 
         return tests;
     }
+
+    @Override
+    public int getNumberOfQuestions(int testId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM questions WHERE test_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, testId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                } else {
+                    return 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error counting questions for test: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public int getTestCountByProfessorId(int professorId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM tests WHERE professor_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, professorId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error counting tests for professor ID: " + e.getMessage(), e);
+        }
+        return 0;
+    }
+
 
 }

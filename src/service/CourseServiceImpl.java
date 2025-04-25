@@ -5,6 +5,7 @@ import dao.CourseDAOImpl;
 import models.Course;
 
 import java.util.List;
+import java.util.Map;
 
 public class CourseServiceImpl implements CourseService {
     private final CourseDAO courseDAO;
@@ -48,4 +49,18 @@ public class CourseServiceImpl implements CourseService {
         return courseDAO.getCoursesByStudent(studentId);
     }
 
+    @Override
+    public Course getCourseByTestId(int testId) throws Exception {
+        return courseDAO.getCourseByTestId(testId);
+    }
+
+    @Override
+    public int getCourseCountByProfessorId(int professorId) throws Exception {
+        return courseDAO.getCourseCountByProfessorId(professorId);
+    }
+
+    @Override
+    public Map<String, Integer> getPassRateDistributionByCourse(int professorId) throws Exception{
+        return courseDAO.getPassRateDistributionByCourse(professorId);
+    }
 }

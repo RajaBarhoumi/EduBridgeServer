@@ -7,4 +7,5 @@ public interface UserService {
     User login(String email, String password) throws Exception;
     User getUserById(int id) throws Exception;
     void validateRole(int userId, String requiredRole) throws Exception;
+    User getStudentByStudentTestId(int studentTestId) throws Exception;
 }

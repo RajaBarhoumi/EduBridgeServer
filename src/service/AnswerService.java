@@ -6,4 +6,5 @@ import java.util.List;
 public interface AnswerService {
     void saveAnswer(Answer answer) throws Exception;
     List<Answer> getAnswersByStudentAndTest(int studentId, int testId) throws Exception;
+    boolean isAnswerCorrect(int selectedOptionId) throws Exception;
 }

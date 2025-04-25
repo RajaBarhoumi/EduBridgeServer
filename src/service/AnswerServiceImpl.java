@@ -18,4 +18,10 @@ public class AnswerServiceImpl implements AnswerService {
     public List<Answer> getAnswersByStudentAndTest(int studentId, int testId) throws Exception {
         return answerDAO.getAnswersByStudentAndTest(studentId, testId);
     }
+
+    @Override
+    public boolean isAnswerCorrect(int selectedOptionId) throws Exception {
+        return answerDAO.isAnswerCorrect(selectedOptionId);
+    }
+
 }
