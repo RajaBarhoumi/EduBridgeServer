@@ -11,6 +11,22 @@ public class OptionDAOImpl implements OptionDAO {
 
     @Override
     public void addOption(Option option) throws Exception {
+        if (option.isCorrect()) {
+            String checkSql = "SELECT COUNT(*) FROM options WHERE question_id = ? AND is_correct = true";
+            try (Connection conn = DBConnection.getConnection();
+                 PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+
+                checkStmt.setInt(1, option.getQuestionId());
+                try (ResultSet rs = checkStmt.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        throw new Exception("Only one correct option is allowed per question.");
+                    }
+                }
+            } catch (SQLException e) {
+                throw new Exception("Error checking existing correct option: " + e.getMessage(), e);
+            }
+        }
+
         String sql = "INSERT INTO options (content, is_correct, question_id) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -23,6 +39,7 @@ public class OptionDAOImpl implements OptionDAO {
             throw new Exception("Error adding option: " + e.getMessage(), e);
         }
     }
+
 
     @Override
     public List<Option> getOptionsByQuestion(int questionId) throws Exception {
