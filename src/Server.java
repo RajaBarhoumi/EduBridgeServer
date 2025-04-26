@@ -28,9 +28,6 @@ public class Server {
             EnrollmentRemoteService enrollmentService = new EnrollmentRemoteServiceImpl();
             registry.bind("EnrollmentService", enrollmentService);
 
-            CertificateRemoteService certificateService = new CertificateRemoteServiceImpl();
-            registry.bind("CertificateService", certificateService);
-
             TestRemoteService testService = new TestRemoteServiceImpl();
             registry.bind("TestService", testService);
 
