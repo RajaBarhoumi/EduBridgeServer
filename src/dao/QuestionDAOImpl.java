@@ -1,6 +1,7 @@
 package dao;
 
 import models.Question;
+import models.Test;
 import util.DBConnection;
 
 import java.sql.*;
@@ -60,6 +61,21 @@ public class QuestionDAOImpl implements QuestionDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new Exception("Error deleting question: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void updateQuestion(Question question) throws Exception {
+        String sql = "UPDATE questions SET content = ?, points = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, question.getContent());
+            stmt.setInt(2, question.getPoints());
+            stmt.setInt(3, question.getId());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new Exception("Error updating test: " + e.getMessage(), e);
         }
     }
 }

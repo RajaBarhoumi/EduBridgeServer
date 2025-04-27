@@ -23,4 +23,9 @@ public class QuestionServiceImpl implements QuestionService {
     public void deleteQuestion(int id) throws Exception {
         questionDAO.deleteQuestion(id);
     }
+
+    @Override
+    public void updateQuestion(Question question) throws Exception {
+        questionDAO.updateQuestion(question);
+    }
 }
