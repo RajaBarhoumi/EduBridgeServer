@@ -42,4 +42,13 @@ public class QuestionRemoteServiceImpl extends UnicastRemoteObject implements Qu
             throw new RemoteException("Error deleting question: " + e.getMessage(), e);
         }
     }
+
+        @Override
+        public void updateQuestion(Question question) throws RemoteException {
+        try {
+            questionService.updateQuestion(question);
+        } catch (Exception e) {
+            throw new RemoteException("Error updating test: " + e.getMessage(), e);
+        }
+    }
 }

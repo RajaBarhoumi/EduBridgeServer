@@ -1,6 +1,7 @@
 package rmi;
 
 import models.Option;
+import models.Question;
 import service.OptionService;
 import service.OptionServiceImpl;
 
@@ -40,6 +41,15 @@ public class OptionRemoteServiceImpl extends UnicastRemoteObject implements Opti
             optionService.deleteOption(id);
         } catch (Exception e) {
             throw new RemoteException("Error deleting option: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void updateOption(Option option) throws RemoteException {
+        try {
+            optionService.updateOption(option);
+        } catch (Exception e) {
+            throw new RemoteException("Error updating option: " + e.getMessage(), e);
         }
     }
 }

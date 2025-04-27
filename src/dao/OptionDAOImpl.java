@@ -1,6 +1,7 @@
 package dao;
 
 import models.Option;
+import models.Question;
 import util.DBConnection;
 
 import java.sql.*;
@@ -77,6 +78,21 @@ public class OptionDAOImpl implements OptionDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new Exception("Error deleting option: " + e.getMessage(), e);
+        }
+    }
+
+
+    @Override
+    public void updateOption(Option option) throws Exception {
+        String sql = "UPDATE options SET is_correct = ?, content = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setBoolean(1, option.isCorrect());
+            stmt.setString(2, option.getContent());
+            stmt.setInt(3, option.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new Exception("Error updating test: " + e.getMessage(), e);
         }
     }
 }
