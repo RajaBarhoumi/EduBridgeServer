@@ -1,28 +1,24 @@
 package rmi;
 
+import dao.TestStatisticsDAO;
+import dao.TestStatisticsDAOImpl;
 import models.TestStatistics;
-import service.TestStatisticsService;
-import service.TestStatisticsServiceImpl;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class TestStatisticsRemoteServiceImpl extends UnicastRemoteObject implements TestStatisticsRemoteService {
 
-    private final TestStatisticsService service;
+    private final TestStatisticsDAO testStatisticsDAO;
 
-    public TestStatisticsRemoteServiceImpl() throws RemoteException {
-        try {
-            service = new TestStatisticsServiceImpl();
-        } catch (Exception e) {
-            throw new RemoteException("Service initialization failed", e);
-        }
+    public TestStatisticsRemoteServiceImpl() throws Exception {
+        super();
+            this.testStatisticsDAO = new TestStatisticsDAOImpl();
     }
 
     @Override
     public void addTestStatistics(TestStatistics stats) throws RemoteException {
         try {
-            service.addTestStatistics(stats);
+            testStatisticsDAO.insert(stats);
         } catch (Exception e) {
             throw new RemoteException("Error adding test statistics", e);
         }
@@ -31,7 +27,7 @@ public class TestStatisticsRemoteServiceImpl extends UnicastRemoteObject impleme
     @Override
     public void updateTestStatistics(TestStatistics stats) throws RemoteException {
         try {
-            service.updateTestStatistics(stats);
+            testStatisticsDAO.update(stats);
         } catch (Exception e) {
             throw new RemoteException("Error updating test statistics", e);
         }
@@ -40,7 +36,7 @@ public class TestStatisticsRemoteServiceImpl extends UnicastRemoteObject impleme
     @Override
     public TestStatistics getTestStatisticsByTestId(int testId) throws RemoteException {
         try {
-            return service.getTestStatisticsByTestId(testId);
+            return testStatisticsDAO.findByTestId(testId);
         } catch (Exception e) {
             throw new RemoteException("Error fetching test statistics", e);
         }

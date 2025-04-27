@@ -1,26 +1,25 @@
 package rmi;
 
+import dao.CourseDAO;
+import dao.CourseDAOImpl;
 import models.Course;
-import service.CourseService;
-import service.CourseServiceImpl;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Map;
 
 public class CourseRemoteServiceImpl extends UnicastRemoteObject implements CourseRemoteService {
-    private final CourseService courseService;
+    private final CourseDAO courseDAO;
 
     public CourseRemoteServiceImpl() throws RemoteException {
         super();
-        this.courseService = new CourseServiceImpl();
+        this.courseDAO = new CourseDAOImpl();
     }
 
     @Override
     public void create(Course course) throws RemoteException {
         try {
-            courseService.create(course);
+            courseDAO.create(course);
         } catch (Exception e) {
             throw new RemoteException("Error creating course: " + e.getMessage(), e);
         }
@@ -29,7 +28,7 @@ public class CourseRemoteServiceImpl extends UnicastRemoteObject implements Cour
     @Override
     public Course getById(int id) throws RemoteException {
         try {
-            return courseService.getById(id);
+            return courseDAO.findById(id);
         } catch (Exception e) {
             throw new RemoteException("Error fetching course: " + e.getMessage(), e);
         }
@@ -38,7 +37,7 @@ public class CourseRemoteServiceImpl extends UnicastRemoteObject implements Cour
     @Override
     public List<Course> getAll() throws RemoteException {
         try {
-            return courseService.getAll();
+            return courseDAO.findAll();
         } catch (Exception e) {
             throw new RemoteException("Error fetching courses: " + e.getMessage(), e);
         }
@@ -47,7 +46,7 @@ public class CourseRemoteServiceImpl extends UnicastRemoteObject implements Cour
     @Override
     public void update(Course course) throws RemoteException {
         try {
-            courseService.update(course);
+            courseDAO.update(course);
         } catch (Exception e) {
             throw new RemoteException("Error updating course: " + e.getMessage(), e);
         }
@@ -56,7 +55,7 @@ public class CourseRemoteServiceImpl extends UnicastRemoteObject implements Cour
     @Override
     public void delete(int id) throws RemoteException {
         try {
-            courseService.delete(id);
+            courseDAO.delete(id);
         } catch (Exception e) {
             throw new RemoteException("Error deleting course: " + e.getMessage(), e);
         }
@@ -65,7 +64,7 @@ public class CourseRemoteServiceImpl extends UnicastRemoteObject implements Cour
     @Override
     public List<Course> getCoursesByProfessorId(int professorId) throws RemoteException {
         try {
-            return courseService.getCoursesByProfessorId(professorId);
+            return courseDAO.getCoursesByProfessorId(professorId);
         } catch (Exception e) {
             throw new RemoteException("Error fetching courses by professor: " + e.getMessage(), e);
         }
@@ -74,7 +73,7 @@ public class CourseRemoteServiceImpl extends UnicastRemoteObject implements Cour
     @Override
     public List<Course> getCoursesByStudentId(int studentId) throws RemoteException {
         try {
-            return courseService.getCoursesByStudentId(studentId);
+            return courseDAO.getCoursesByStudent(studentId);
         } catch (Exception e) {
             throw new RemoteException("Error fetching courses by student: " + e.getMessage(), e);
         }
@@ -83,7 +82,7 @@ public class CourseRemoteServiceImpl extends UnicastRemoteObject implements Cour
     @Override
     public Course getCourseByTestId(int testId) throws RemoteException {
         try {
-            return courseService.getCourseByTestId(testId);
+            return courseDAO.getCourseByTestId(testId);
         } catch (Exception e) {
             throw new RemoteException("Error fetching course by test ID: " + e.getMessage(), e);
         }
@@ -92,7 +91,7 @@ public class CourseRemoteServiceImpl extends UnicastRemoteObject implements Cour
     @Override
     public int getCourseCountByProfessorId(int professorId) throws RemoteException{
         try{
-            return courseService.getCourseCountByProfessorId(professorId);
+            return courseDAO.getCourseCountByProfessorId(professorId);
         }catch (Exception e){
             throw new RemoteException("Error fetching course count by professor: " + e.getMessage(), e);
         }
@@ -101,7 +100,7 @@ public class CourseRemoteServiceImpl extends UnicastRemoteObject implements Cour
     @Override
     public Map<String, Integer> getPassRateDistributionByCourse(int professorId) throws RemoteException{
         try {
-            return courseService.getPassRateDistributionByCourse(professorId);
+            return courseDAO.getPassRateDistributionByCourse(professorId);
         }catch (Exception e){
             throw new RemoteException("Error fetching pass rate distribution by professor: " + e.getMessage(), e);
         }

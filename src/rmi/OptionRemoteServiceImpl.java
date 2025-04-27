@@ -1,26 +1,24 @@
 package rmi;
 
+import dao.OptionDAO;
+import dao.OptionDAOImpl;
 import models.Option;
-import models.Question;
-import service.OptionService;
-import service.OptionServiceImpl;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 public class OptionRemoteServiceImpl extends UnicastRemoteObject implements OptionRemoteService {
-    private final OptionService optionService;
+    private final OptionDAO optionDAO;
 
     public OptionRemoteServiceImpl() throws RemoteException {
         super();
-        this.optionService = new OptionServiceImpl();
+        this.optionDAO = new OptionDAOImpl();
     }
 
     @Override
     public void addOption(Option option) throws RemoteException {
         try {
-            optionService.addOption(option);
+            optionDAO.addOption(option);
         } catch (Exception e) {
             throw new RemoteException("Error adding option: " + e.getMessage(), e);
         }
@@ -29,7 +27,7 @@ public class OptionRemoteServiceImpl extends UnicastRemoteObject implements Opti
     @Override
     public List<Option> getOptionsByQuestion(int questionId) throws RemoteException {
         try {
-            return optionService.getOptionsByQuestion(questionId);
+            return optionDAO.getOptionsByQuestion(questionId);
         } catch (Exception e) {
             throw new RemoteException("Error fetching options: " + e.getMessage(), e);
         }
@@ -38,7 +36,7 @@ public class OptionRemoteServiceImpl extends UnicastRemoteObject implements Opti
     @Override
     public void deleteOption(int id) throws RemoteException {
         try {
-            optionService.deleteOption(id);
+            optionDAO.deleteOption(id);
         } catch (Exception e) {
             throw new RemoteException("Error deleting option: " + e.getMessage(), e);
         }
@@ -47,7 +45,7 @@ public class OptionRemoteServiceImpl extends UnicastRemoteObject implements Opti
     @Override
     public void updateOption(Option option) throws RemoteException {
         try {
-            optionService.updateOption(option);
+            optionDAO.updateOption(option);
         } catch (Exception e) {
             throw new RemoteException("Error updating option: " + e.getMessage(), e);
         }

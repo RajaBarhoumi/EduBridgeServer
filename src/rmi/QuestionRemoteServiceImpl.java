@@ -1,25 +1,25 @@
 package rmi;
 
+import dao.QuestionDAO;
+import dao.QuestionDAOImpl;
 import models.Question;
-import service.QuestionService;
-import service.QuestionServiceImpl;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 public class QuestionRemoteServiceImpl extends UnicastRemoteObject implements QuestionRemoteService {
-    private final QuestionService questionService;
+    private final QuestionDAO questionDAO;
 
     public QuestionRemoteServiceImpl() throws RemoteException {
         super();
-        this.questionService = new QuestionServiceImpl();
+        this.questionDAO = new QuestionDAOImpl();
     }
 
     @Override
     public void addQuestion(Question question) throws RemoteException {
         try {
-            questionService.addQuestion(question);
+            questionDAO.addQuestion(question);
         } catch (Exception e) {
             throw new RemoteException("Error adding question: " + e.getMessage(), e);
         }
@@ -28,7 +28,7 @@ public class QuestionRemoteServiceImpl extends UnicastRemoteObject implements Qu
     @Override
     public List<Question> getQuestionsByTest(int testId) throws RemoteException {
         try {
-            return questionService.getQuestionsByTest(testId);
+            return questionDAO.getQuestionsByTest(testId);
         } catch (Exception e) {
             throw new RemoteException("Error fetching questions: " + e.getMessage(), e);
         }
@@ -37,7 +37,7 @@ public class QuestionRemoteServiceImpl extends UnicastRemoteObject implements Qu
     @Override
     public void deleteQuestion(int id) throws RemoteException {
         try {
-            questionService.deleteQuestion(id);
+            questionDAO.deleteQuestion(id);
         } catch (Exception e) {
             throw new RemoteException("Error deleting question: " + e.getMessage(), e);
         }
@@ -46,7 +46,7 @@ public class QuestionRemoteServiceImpl extends UnicastRemoteObject implements Qu
         @Override
         public void updateQuestion(Question question) throws RemoteException {
         try {
-            questionService.updateQuestion(question);
+            questionDAO.updateQuestion(question);
         } catch (Exception e) {
             throw new RemoteException("Error updating test: " + e.getMessage(), e);
         }

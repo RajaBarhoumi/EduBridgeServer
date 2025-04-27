@@ -1,25 +1,25 @@
 package rmi;
 
+import dao.StudentTestDAO;
+import dao.StudentTestDAOImpl;
 import models.StudentTest;
-import service.StudentTestService;
-import service.StudentTestServiceImpl;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
+import java.util.Map;
 
 public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements StudentTestRemoteService {
 
-    private final StudentTestService studentTestService;
+    private final StudentTestDAO studentTestDAO;
 
     public StudentTestRemoteServiceImpl() throws RemoteException {
-        studentTestService = new StudentTestServiceImpl();
+        studentTestDAO = new StudentTestDAOImpl();
     }
 
     @Override
     public int addStudentTest(StudentTest studentTest) throws RemoteException {
         try {
-            return studentTestService.addStudentTest(studentTest);
+            return studentTestDAO.addStudentTest(studentTest);
         } catch (Exception e) {
             throw new RemoteException("Error adding student test: " + e.getMessage(), e);
         }
@@ -28,7 +28,7 @@ public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements
     @Override
     public StudentTest getStudentTestById(int id) throws RemoteException {
         try {
-            return studentTestService.getStudentTestById(id);
+            return studentTestDAO.findById(id);
         } catch (Exception e) {
             throw new RemoteException("Error getting student test by ID: " + e.getMessage(), e);
         }
@@ -37,7 +37,7 @@ public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements
     @Override
     public List<StudentTest> getStudentTestsByStudentId(int studentId) throws RemoteException {
         try {
-            return studentTestService.getStudentTestsByStudentId(studentId);
+            return studentTestDAO.findByStudentId(studentId);
         } catch (Exception e) {
             throw new RemoteException("Error getting student tests by student ID: " + e.getMessage(), e);
         }
@@ -46,7 +46,7 @@ public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements
     @Override
     public List<StudentTest> getStudentTestsByTestId(int testId) throws RemoteException {
         try {
-            return studentTestService.getStudentTestsByTestId(testId);
+            return studentTestDAO.findByTestId(testId);
         } catch (Exception e) {
             throw new RemoteException("Error getting student tests by test ID: " + e.getMessage(), e);
         }
@@ -55,7 +55,7 @@ public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements
     @Override
     public void updateStudentTest(StudentTest studentTest) throws RemoteException {
         try {
-            studentTestService.updateStudentTest(studentTest);
+            studentTestDAO.updateStudentTest(studentTest);
         } catch (Exception e) {
             throw new RemoteException("Error updating student test: " + e.getMessage(), e);
         }
@@ -64,7 +64,7 @@ public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements
     @Override
     public void deleteStudentTest(int studentTestId) throws RemoteException {
         try {
-            studentTestService.deleteStudentTest(studentTestId);
+            studentTestDAO.deleteStudentTest(studentTestId);
         } catch (Exception e) {
             throw new RemoteException("Error deleting student test: " + e.getMessage(), e);
         }
@@ -73,7 +73,7 @@ public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements
     @Override
     public String calculateAndUpdateStudentTestScore(int studentTestId) throws RemoteException {
         try {
-            return studentTestService.calculateAndUpdateStudentTestScore(studentTestId);
+            return studentTestDAO.calculateAndUpdateStudentTestScore(studentTestId);
         } catch (Exception e) {
             throw new RemoteException("Error calculating and updating student test score: " + e.getMessage(), e);
         }
@@ -82,7 +82,7 @@ public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements
     @Override
     public int getCertificateCountByProfessorId(int professorId) throws RemoteException{
         try{
-            return studentTestService.getCertificateCountByProfessorId(professorId);
+            return studentTestDAO.getCertificateCountByProfessorId(professorId);
         }catch (Exception e){
             throw new RemoteException("Error getting certificate count: " + e.getMessage(), e);
         }
@@ -91,7 +91,7 @@ public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements
     @Override
     public int getTestCountByStudentId(int studentId) throws RemoteException {
         try{
-            return studentTestService.getTestCountByStudentId(studentId);
+            return studentTestDAO.getTestCountByStudentId(studentId);
         }catch (Exception e){
             throw new RemoteException("Error getting test count: " + e.getMessage(), e);
         }
@@ -100,9 +100,18 @@ public class StudentTestRemoteServiceImpl extends UnicastRemoteObject implements
     @Override
     public int getCertificateCountByStudentId(int studentId) throws RemoteException {
         try{
-            return studentTestService.getCertificateCountByStudentId(studentId);
+            return studentTestDAO.getCertificateCountByStudentId(studentId);
         }catch (Exception e){
             throw new RemoteException("Error getting certificate count: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> getStudentTestResults(int studentId) throws RemoteException {
+        try{
+            return studentTestDAO.getStudentTestResults(studentId);
+        }catch (Exception e){
+            throw new RemoteException("Error getting test results: " + e.getMessage(), e);
         }
     }
 }

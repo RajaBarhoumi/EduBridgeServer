@@ -1,25 +1,24 @@
 package rmi;
 
+import dao.EnrollmentDAO;
+import dao.EnrollmentDAOImpl;
 import models.Enrollment;
-import service.EnrollmentService;
-import service.EnrollmentServiceImpl;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 public class EnrollmentRemoteServiceImpl extends UnicastRemoteObject implements EnrollmentRemoteService {
-    private final EnrollmentService enrollmentService;
+    private final EnrollmentDAO enrollmentDAO;
 
     public EnrollmentRemoteServiceImpl() throws RemoteException {
         super();
-        this.enrollmentService = new EnrollmentServiceImpl();
+        this.enrollmentDAO = new EnrollmentDAOImpl();
     }
 
     @Override
     public void enrollStudent(Enrollment enrollment) throws RemoteException {
         try {
-            enrollmentService.enrollStudent(enrollment);
+            enrollmentDAO.enrollStudent(enrollment);
         } catch (Exception e) {
             throw new RemoteException("Error enrolling student: " + e.getMessage(), e);
         }
@@ -28,7 +27,7 @@ public class EnrollmentRemoteServiceImpl extends UnicastRemoteObject implements 
     @Override
     public List<Enrollment> getEnrollmentsByStudent(int studentId) throws RemoteException {
         try {
-            return enrollmentService.getEnrollmentsByStudent(studentId);
+            return enrollmentDAO.getEnrollmentsByStudent(studentId);
         } catch (Exception e) {
             throw new RemoteException("Error fetching enrollments: " + e.getMessage(), e);
         }
@@ -37,7 +36,7 @@ public class EnrollmentRemoteServiceImpl extends UnicastRemoteObject implements 
     @Override
     public void deleteEnrollment(int id) throws RemoteException {
         try {
-            enrollmentService.deleteEnrollment(id);
+            enrollmentDAO.deleteEnrollment(id);
         } catch (Exception e) {
             throw new RemoteException("Error deleting enrollment: " + e.getMessage(), e);
         }
@@ -46,7 +45,7 @@ public class EnrollmentRemoteServiceImpl extends UnicastRemoteObject implements 
     @Override
     public int getCourseCountByStudentId(int studentId) throws RemoteException{
         try {
-            return enrollmentService.getCourseCountByStudentId(studentId);
+            return enrollmentDAO.getCourseCountByStudentId(studentId);
         }catch (Exception e){
             throw new RemoteException("Error fetching course count: " + e.getMessage(), e);
         }

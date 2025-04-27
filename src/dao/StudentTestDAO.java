@@ -3,6 +3,7 @@ package dao;
 import models.StudentTest;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StudentTestDAO {
     int addStudentTest(StudentTest studentTest) throws Exception;
@@ -15,4 +16,5 @@ public interface StudentTestDAO {
     int getCertificateCountByProfessorId(int professorId) throws Exception;
     int getTestCountByStudentId(int studentId) throws Exception;
     int getCertificateCountByStudentId(int studentId) throws Exception;
+    List<Map<String, Object>> getStudentTestResults(int studentId) throws Exception;
 }

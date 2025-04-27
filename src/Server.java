@@ -1,6 +1,4 @@
 import rmi.*;
-import service.*;
-
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 

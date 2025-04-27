@@ -5,7 +5,9 @@ import util.DBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StudentTestDAOImpl implements StudentTestDAO {
 
@@ -272,5 +274,31 @@ public class StudentTestDAOImpl implements StudentTestDAO {
             throw new Exception("Error counting certificates by student ID: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public List<Map<String, Object>> getStudentTestResults(int studentId) throws Exception {
+        List<Map<String, Object>> results = new ArrayList<>();
+        String sql = "SELECT t.title, st.score " +
+                "FROM student_tests st " +
+                "JOIN tests t ON st.test_id = t.id " +
+                "WHERE st.student_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, studentId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Map<String, Object> row = new HashMap<>();
+                    row.put("title", rs.getString("title"));
+                    row.put("score", rs.getFloat("score"));
+                    results.add(row);
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Error fetching student test results: " + e.getMessage(), e);
+        }
+        return results;
+    }
+
 
 }
